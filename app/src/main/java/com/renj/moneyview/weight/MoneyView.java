@@ -1,6 +1,7 @@
 package com.renj.moneyview.weight;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -26,12 +27,13 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
     // 默认最大输入的位数，包括小数点
     private static final int DEFAULT_MAX_LENGTH = 11;
     // 默认小数点后保持的位数
-    private static final int DEFAULT_POINT_LENGTH = 2;
+    private static final int DEFAULT_DECIMAL_LENGTH = 2;
 
+    // 控件中字符的最大长度，包括小数点
     private int mMaxLength = DEFAULT_MAX_LENGTH;
-    // 当这个值小于等于0时，表示不控制小数点的位数
-    private int mPointLength = DEFAULT_POINT_LENGTH;
-    // 指定从多少位开始到最后不能是小数点，当小于等于1时表示控制小数点的位置。 点默认最后一位不能是小数点
+    // 小数点后保持的位数，当小于等于0时，表示不控制小数点的位数
+    private int mDecimalLength = DEFAULT_DECIMAL_LENGTH;
+    // 指定从多少位开始到最后不能是小数点，当小于等于1时表示控制小数点的位置。 默认最后一位不能是小数点
     private int mPointCannotPosition = DEFAULT_MAX_LENGTH;
 
     public MoneyView(Context context) {
@@ -45,11 +47,53 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
 
     public MoneyView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mPointLength = 0;
-        mPointCannotPosition = 5;
+        initAttrs(context, attrs);
         initView();
     }
 
+    /**
+     * 获取xml文件中定义的属性
+     *
+     * @param context
+     * @param attrs
+     */
+    private void initAttrs(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MoneyView);
+        mMaxLength = typedArray.getInteger(R.styleable.MoneyView_max_length, DEFAULT_MAX_LENGTH);
+        mDecimalLength = typedArray.getInteger(R.styleable.MoneyView_decimal_length, DEFAULT_DECIMAL_LENGTH);
+        mPointCannotPosition = typedArray.getInteger(R.styleable.MoneyView_point_cannot_position, DEFAULT_MAX_LENGTH);
+    }
+
+    public int getMaxLength() {
+        return mMaxLength;
+    }
+
+    public MoneyView setMaxLength(int maxLength) {
+        this.mMaxLength = maxLength;
+        return this;
+    }
+
+    public int getDecimalLength() {
+        return mDecimalLength;
+    }
+
+    public MoneyView setDecimalLength(int decimalLength) {
+        this.mDecimalLength = decimalLength;
+        return this;
+    }
+
+    public int getPointCannotPosition() {
+        return mPointCannotPosition;
+    }
+
+    public MoneyView setPointCannotPosition(int pointCannotPosition) {
+        this.mPointCannotPosition = pointCannotPosition;
+        return this;
+    }
+
+    /**
+     * 初始化监听
+     */
     private void initView() {
         // 设置输入类型，注意：这里需要2个同时设置表示输入数字和小数点并且弹出数字键盘
         this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -82,11 +126,11 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
                     }
                 }
 
-                // 判断 mPointLength 值是否大于0
-                if (mPointLength > 0) {
+                // 判断 mDecimalLength 值是否大于0
+                if (mDecimalLength > 0) {
                     // 计算小数点后面的位数， 判断 小数点后能保持的最大位数
-                    if (s.toString().contains(".") && (s.length() - 1) - (s.toString().indexOf(".")) > mPointLength) {
-                        Toast.makeText(getContext(), "小数点后只能保持" + mPointLength + "位", Toast.LENGTH_SHORT).show();
+                    if (s.toString().contains(".") && (s.length() - 1) - (s.toString().indexOf(".")) > mDecimalLength) {
+                        Toast.makeText(getContext(), "小数点后只能保持" + mDecimalLength + "位", Toast.LENGTH_SHORT).show();
                         getText().delete(currentLength - 1, currentLength);
                         currentLength = s.toString().length();
                     }

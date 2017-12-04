@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MoneyView">
+        <!--设置控件输入内容的最大长度，包含小数点，只有设置了这个属性时，在超出长度之后才会弹出Toast提示，
+        如果设置了系统的 android:maxLength 属性，那么在这个属性将失效，超过长度也不会弹出Toast提示。-->
+        <attr name="max_length" format="integer" />
+        <!--小数点后保持的位数，当小于等于0时，表示不控制小数点的位数-->
+        <attr name="decimal_length" format="integer" />
+        <!--指定从多少位开始到最后不能是小数点，当小于等于1时表示控制小数点的位置。 默认最后一位不能是小数点-->
+        <attr name="point_cannot_position" format="integer" />
+    </declare-styleable>
+</resources>
