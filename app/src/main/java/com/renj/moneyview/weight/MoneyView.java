@@ -29,10 +29,10 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
     private static final int DEFAULT_POINT_LENGTH = 2;
 
     private int mMaxLength = DEFAULT_MAX_LENGTH;
+    // 当这个值小于等于0时，表示不控制小数点的位数
     private int mPointLength = DEFAULT_POINT_LENGTH;
-    // 指定小数点不能在的位置，默认最后一位不能是小数点
+    // 指定从多少位开始到最后不能是小数点，当小于等于1时表示控制小数点的位置。 点默认最后一位不能是小数点
     private int mPointCannotPosition = DEFAULT_MAX_LENGTH;
-
 
     public MoneyView(Context context) {
         this(context, null);
@@ -45,6 +45,8 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
 
     public MoneyView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mPointLength = 0;
+        mPointCannotPosition = 5;
         initView();
     }
 
@@ -52,6 +54,7 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
         // 设置输入类型，注意：这里需要2个同时设置表示输入数字和小数点并且弹出数字键盘
         this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
+        // 设置监听
         addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -69,17 +72,20 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
                     currentLength = s.toString().length();
                 }
 
-                // 判断 当前的长度和是否为不能是小数点的位置并比较当前位置是否为小数点
-                if (currentLength == mPointCannotPosition && s.toString().substring(mPointCannotPosition - 1, mPointCannotPosition).equals(".")) {
-                    Toast.makeText(getContext(), "第" + mPointCannotPosition + "位不能是小数点", Toast.LENGTH_SHORT).show();
-                    getText().delete(currentLength - 1, currentLength);
-                    currentLength = s.toString().length();
+                // 判断 mPointCannotPosition 值是否大于1
+                if (mPointCannotPosition > 1) {
+                    // 判断 当前的长度和是否为不能是小数点的位置并比较当前位置是否为小数点
+                    if (currentLength >= mPointCannotPosition && s.charAt(currentLength - 1) == '.') {
+                        Toast.makeText(getContext(), "第" + mPointCannotPosition + "位开始不能是小数点", Toast.LENGTH_SHORT).show();
+                        getText().delete(currentLength - 1, currentLength);
+                        currentLength = s.toString().length();
+                    }
                 }
 
-                // 确定小数点后能保持的最大位数
-                if (s.toString().contains(".")) {
-                    // 计算小数点后面的位数
-                    if ((s.length() - 1) - (s.toString().indexOf(".")) > mPointLength) {
+                // 判断 mPointLength 值是否大于0
+                if (mPointLength > 0) {
+                    // 计算小数点后面的位数， 判断 小数点后能保持的最大位数
+                    if (s.toString().contains(".") && (s.length() - 1) - (s.toString().indexOf(".")) > mPointLength) {
                         Toast.makeText(getContext(), "小数点后只能保持" + mPointLength + "位", Toast.LENGTH_SHORT).show();
                         getText().delete(currentLength - 1, currentLength);
                         currentLength = s.toString().length();
