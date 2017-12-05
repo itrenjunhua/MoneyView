@@ -36,6 +36,8 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
     // 指定从多少位开始到最后不能是小数点，当小于等于1时表示控制小数点的位置。 默认最后一位不能是小数点
     private int mPointCannotPosition = DEFAULT_MAX_LENGTH;
 
+    private MoneyChangeListener mMoneyChangeListener;
+
     public MoneyView(Context context) {
         this(context, null);
     }
@@ -62,6 +64,17 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
         mMaxLength = typedArray.getInteger(R.styleable.MoneyView_max_length, DEFAULT_MAX_LENGTH);
         mDecimalLength = typedArray.getInteger(R.styleable.MoneyView_decimal_length, DEFAULT_DECIMAL_LENGTH);
         mPointCannotPosition = typedArray.getInteger(R.styleable.MoneyView_point_cannot_position, DEFAULT_MAX_LENGTH);
+    }
+
+    /**
+     * 设置监听
+     *
+     * @param moneyChangeListener
+     * @return
+     */
+    public MoneyView setMoneyChangeListener(MoneyChangeListener moneyChangeListener) {
+        this.mMoneyChangeListener = moneyChangeListener;
+        return this;
     }
 
     public int getMaxLength() {
@@ -102,7 +115,8 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
         addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (mMoneyChangeListener != null)
+                    mMoneyChangeListener.beforeTextChanged(s, start, count, after);
             }
 
             @Override
@@ -150,12 +164,30 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
                         getText().append(sequence);
                     }
                 }
+
+                if (mMoneyChangeListener != null)
+                    mMoneyChangeListener.onTextChanged(s, start, before, count);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (mMoneyChangeListener != null)
+                    mMoneyChangeListener.afterTextChanged(s);
             }
         });
+    }
+
+    /**
+     * 输入金额改变监听
+     */
+    public static abstract class MoneyChangeListener {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
     }
 }
