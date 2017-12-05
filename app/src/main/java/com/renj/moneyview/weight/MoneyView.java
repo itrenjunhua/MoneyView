@@ -78,36 +78,69 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
     /**
      * 设置监听
      *
-     * @param moneyChangeListener
-     * @return
+     * @param moneyChangeListener MoneyChangeListener 监听对象
+     * @return 返回当前对象，方便链式调用
      */
     public MoneyView setMoneyChangeListener(MoneyChangeListener moneyChangeListener) {
         this.mMoneyChangeListener = moneyChangeListener;
         return this;
     }
 
+    /**
+     * 获取内容的最大长度，包括小数点
+     *
+     * @return
+     */
     public int getMaxLength() {
         return mMaxLength;
     }
 
+    /**
+     * 设置内容的最大长度，包括小数点
+     *
+     * @param maxLength 最大长度
+     * @return 返回当前对象，方便链式调用
+     */
     public MoneyView setMaxLength(int maxLength) {
         this.mMaxLength = maxLength;
         return this;
     }
 
+    /**
+     * 获取小数点的最大位数
+     *
+     * @return
+     */
     public int getDecimalLength() {
         return mDecimalLength;
     }
 
+    /**
+     * 设置小数点的最大位数
+     *
+     * @param decimalLength 小数点的位数
+     * @return 返回当前对象，方便链式调用
+     */
     public MoneyView setDecimalLength(int decimalLength) {
         this.mDecimalLength = decimalLength;
         return this;
     }
 
+    /**
+     * 获取从多少位开始至最后不能输入小数点
+     *
+     * @return
+     */
     public int getPointCannotPosition() {
         return mPointCannotPosition;
     }
 
+    /**
+     * 设置从多少位开始至最后不能输入小数点
+     *
+     * @param pointCannotPosition 开始不能输入小数点的位置
+     * @return 返回当前对象，方便链式调用
+     */
     public MoneyView setPointCannotPosition(int pointCannotPosition) {
         this.mPointCannotPosition = pointCannotPosition;
         return this;
