@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
 
     <com.renj.moneyview.weight.MoneyView
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:hint="输入金额"
+        android:id="@+id/moneyview1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:hint="输入金额，代码指定属性"
         android:textColor="@color/colorPrimary" />
+
+    <com.renj.moneyview.weight.MoneyView
+        android:id="@+id/moneyview2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:hint="输入金额，xml中指定属性"
+        android:textColor="@color/colorPrimary"
+        app:decimal_length="2"
+        app:max_length="9"
+        app:point_cannot_position="8" />
 
 </LinearLayout>
