@@ -73,6 +73,7 @@ public class MoneyView extends android.support.v7.widget.AppCompatEditText {
         mMaxLength = typedArray.getInteger(R.styleable.MoneyView_max_length, DEFAULT_MAX_LENGTH);
         mDecimalLength = typedArray.getInteger(R.styleable.MoneyView_decimal_length, DEFAULT_DECIMAL_LENGTH);
         mPointCannotPosition = typedArray.getInteger(R.styleable.MoneyView_point_cannot_position, DEFAULT_MAX_LENGTH);
+        typedArray.recycle();
     }
 
     /**
