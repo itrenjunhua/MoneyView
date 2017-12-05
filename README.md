@@ -12,7 +12,7 @@
 > ① 布局文件中指定控件
 > 
 	<com.renj.moneyview.weight.MoneyView
-	android:id="@+id/moneyview1"
+		android:id="@+id/moneyview1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
